@@ -1,6 +1,8 @@
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, redirect, url_for, render_template
+from flask import request
 from datetime import datetime
 import time
+
 app = Flask(__name__)
 
 
@@ -32,26 +34,30 @@ def home():
             "user": user
         }
     ]
-    request = {"user":user, "session": {"avatar_url": "https://github.githubassets.com/images/modules/logos_page/Octocat.png"}}
+    reques = {"user": user,
+              "session": {"avatar_url": "https://github.githubassets.com/images/modules/logos_page/Octocat.png"}}
 
-    return render_template('home.html', repos=repos,request=request, user=user, num_of_users= 0, num_of_repos= 0)
+    return render_template('home.html', repos=repos, request=reques, user=user, num_of_users=0, num_of_repos=0)
 
 
 @app.route('/profile')
 def profile():
+    repo = request.args.get("repo")
+    if repo:
+        return profile_ontologies(repo)
     user = {"email": "ontoology@ontoology.com", "is_authenticated": True}
     repos = [{
-            "id": "123",
-            "url": "test_repo",
-            "last_used": datetime.now(),
-            "state": "Ready",
-            "owner": "no",
-            "previsual": False,
-            "previsual_page_available": False,
-            "notes": "notes",
-            "progress": 0.0,
-            "user": user
-        },
+        "id": "123",
+        "url": "test_repo",
+        "last_used": datetime.now(),
+        "state": "Ready",
+        "owner": "no",
+        "previsual": False,
+        "previsual_page_available": False,
+        "notes": "notes",
+        "progress": 0.0,
+        "user": user
+    },
         {
             "id": "456",
             "url": "demo2",
@@ -65,7 +71,8 @@ def profile():
             "user": user
         }
     ]
-    request = {"user":user, "session": {"avatar_url": "https://github.githubassets.com/images/modules/logos_page/Octocat.png"}}
+    reques = {"user": user,
+              "session": {"avatar_url": "https://github.githubassets.com/images/modules/logos_page/Octocat.png"}}
     pnames = [
         {
             'id': "3823",
@@ -82,13 +89,44 @@ def profile():
             'ontology': 'one'
         }
     ]
-    return render_template('profile.html', repos=repos, manager=False, request=request, user=user, pnames=pnames,strftime=time.strftime)
+    return render_template('profile.html', repos=repos, manager=False, request=reques, user=user, pnames=pnames,
+                           strftime=time.strftime)
 
 
 #    return render(request, 'profile.html', {'repos': repos, 'pnames': PublishName.objects.filter(user=user),
 #                                            'error': error_msg, 'manager': request.user.email in get_managers()})
 
 
+def profile_ontologies(repo):
+    return {
+        'ontologies': [
+            {
+                "ar2dtool": True,
+                "ontology": "/ontology1-with-themis.owl",
+                "oops": True,
+                "owl2jsonld": True,
+                "pname": "j123",
+                "published": True,
+                "themis_results": 90,
+                "widoco": True, },
+            {
+                "ar2dtool": True,
+                "ontology": "/ontology2-without-themis.owl",
+                "oops": True,
+                "owl2jsonld": True,
+                "pname": "j123",
+                "published": True,
+                "widoco": True, },
+            {
+                "ar2dtool": True,
+                "ontology": "/ontology3-no-published.owl",
+                "oops": True,
+                "owl2jsonld": True,
+                "pname": "j123",
+                "published": False,
+                "widoco": True, },
+        ]
+    }
 
 
 if __name__ == "__main__":
