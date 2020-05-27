@@ -6,7 +6,6 @@ import time
 app = Flask(__name__)
 
 
-
 @app.route('/')
 def home():
     user = {"email": "ontoology@ontoology.com", "is_authenticated": True}
@@ -177,7 +176,11 @@ def repository (index):
         index=index
     else:
         index=-1
-    return render_template('repository.html', repos=repos, manager=False, request=request, user=user, pnames=pnames,strftime=time.strftime,ontologies=profile_ontologies(repos[index]), index=index)
+    reques = {"user": user,
+              "session": {"avatar_url": "https://github.githubassets.com/images/modules/logos_page/Octocat.png"}}
+    return render_template('repository.html', repos=repos, manager=False, request=reques, user=user, pnames=pnames,
+                           strftime=time.strftime,ontologies=profile_ontologies(repos[index]), index=index)
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
