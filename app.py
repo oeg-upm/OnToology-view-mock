@@ -128,6 +128,59 @@ def profile_ontologies(repo):
         ]
     }
 
+@app.route('/repository/<int:index>')
+def repository (index):
+    user = {"email": "ontoology@ontoology.com", "is_authenticated": True}
+    repos = [{
+    "id": "123",
+    "url": "test_repo",
+    "last_used": datetime.now(),
+    "state": "Ready",
+    "owner": "no",
+    "previsual": False,
+    "previsual_page_available": False,
+    "notes": "notes",
+    "progress": 0.0,
+    "user": user
+    },
+    {
+        "id": "456",
+        "url": "demo2",
+        "last_used": datetime.now(),
+        "state": "Ready",
+        "owner": "no",
+        "previsual": True,
+        "previsual_page_available": True,
+        "notes": "notes",
+        "progress": 100,
+        "user": user
+    }
+    ]
+    pnames = [
+    {
+        'id': "3823",
+        'name': "test",
+        'user': user,
+        'repo': repos[0],
+        'ontology': 'another'
+    },
+    {
+        'id': "98123",
+        'name': "demo2",
+        'user': user,
+        'repo': repos[1],
+        'ontology': 'one'
+    }
+    ]
+    if(0<=index and index<len(repos)):    
+        index=index
+    else:
+        index=-1
+    reques = {"user": user,
+              "session": {"avatar_url": "https://github.githubassets.com/images/modules/logos_page/Octocat.png"}}
+    return render_template('repository.html', repos=repos, manager=False, request=reques, user=user, pnames=pnames,
+                           strftime=time.strftime,ontologies=profile_ontologies(repos[index]), index=index)
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
