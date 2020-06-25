@@ -1,6 +1,8 @@
 # OnToology-view-mock
 This is a mock used for the development of the new OnToology view.
 
+This work has been carried out by Carlos de Ramón Pacios during the final degree project: <include link to oa.upm.es>
+
 
 ## Python version
 ```2.7```
